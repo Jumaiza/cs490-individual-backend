@@ -3,7 +3,8 @@ var mysql = require('mysql');
 var conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "Cs288005!"
+    password: "Cs288005!",
+    database: "sakila",
 });
 
 conn.connect(function(err) {
