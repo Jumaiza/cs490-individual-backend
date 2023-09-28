@@ -12,8 +12,10 @@ app.get('/health/check', (req,res) =>{
 
 const homeRoutes = require('./routes/home');
 const moviesRoutes = require('./routes/movies');
+const customerRoutes = require('./routes/customers');
 
 app.use('/api', homeRoutes);
 app.use('/api', moviesRoutes);
+app.use('/api', customerRoutes);
 
 app.listen(port, () => console.log(`Server is successfully listening on port ${port}`));
