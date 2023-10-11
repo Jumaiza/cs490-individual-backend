@@ -55,4 +55,39 @@ router.post('/movies/search-by-category', (req, res) => {
     });
 });
 
+router.post('/movies/check-available', (req, res) => {
+    const filmId = req.body.film_id;
+    const query1 = `
+    SELECT inventory_id FROM inventory WHERE film_id = ${filmId}
+    AND NOT EXISTS (
+        SELECT 1
+        FROM rental
+        WHERE inventory_id = inventory.inventory_id
+        AND return_date IS NULL
+    )
+    LIMIT 1`;
+    db_conn.query(query1, (error, result) => {
+        if(error){
+            console.error(error)
+            return res.status(500).json({ error: 'Error executing database query' });
+        }
+        res.json(result);
+    });
+});
+
+router.post('/movies/rent-to-customer', (req, res) => {
+    const inventoryId = req.body.inventory_id;
+    const customerId = req.body.customer_id;
+    const query1 = `
+        INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id)
+        VALUES ( CURRENT_TIMESTAMP, ${inventoryId}, ${customerId}, 1)`
+    db_conn.query(query1, (error, result) => {
+        if(error){
+            console.error(error)
+            return res.status(500).json('Invalid Customer ID');
+        }
+        res.status(200).send('Film rented successfully!');
+    });
+});
+
 module.exports = router;
