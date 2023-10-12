@@ -84,7 +84,7 @@ router.post('/movies/rent-to-customer', (req, res) => {
     db_conn.query(query1, (error, result) => {
         if(error){
             console.error(error)
-            return res.status(500).json('Invalid Customer ID');
+            return res.status(500).json({error: 'Invalid Customer ID'});
         }
         res.status(200).send('Film rented successfully!');
     });
